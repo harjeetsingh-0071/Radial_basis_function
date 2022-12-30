@@ -1,0 +1,42 @@
+import pandas as pd
+import numpy as np
+import math
+import matplotlib.pyplot as mp
+x = np.sort(np.random.uniform(low=0, high=1, size=(70)))
+def out(x):
+    function =(1 + 0.6 * np.sin(2 * math.pi * x / 0.7) + 0.3 * np.sin((2 * math.pi * x)) / 2)
+    return function
+c1=0.2;
+c2=0.85;
+r1=0.15;
+r2=0.15;
+l_r=0.05;
+w1 = np.round(np.random.rand(1), 1)
+w2 = np.round(np.random.rand(1), 1)
+b = np.round(np.random.rand(1), 1)
+def rbf(x,c,r):
+    f = np.exp(-pow((x-c),2)/(2*pow(r,2)))
+    return f
+
+for j in range(1500):
+    print(j)
+    for i in range(len(x)):
+        y = rbf(x[i],c1,r1)*w1 + rbf(x[i],c2,r2)*w2 + b
+        e = out(x[i]) - y
+        if e > -0.0001 and e <0.0001:
+            print("********************")
+            break
+        else:
+            w1 = w1 + l_r * e * rbf(x[i],c1,r1)
+            w2 = w2 + l_r * e * rbf(x[i],c2,r2)
+            b = b + l_r * e
+out_plot = np.zeros(0)
+fun = []
+print(len(out_plot))
+for j in range (len(x)):
+    y = rbf(x[j], c1, r1) * w1 + rbf(x[j], c2, r2) * w2 + b
+    out_plot = np.append(out_plot, y)
+    fun = np.append(fun, out(x[j]))
+mp.plot(x,fun)
+mp.plot(x,out_plot)
+mp.show()
